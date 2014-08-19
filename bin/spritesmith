@@ -11,7 +11,7 @@ var json2css = require('json2css');
 var spritesmith = require('..');
 var formats = require('../lib/formats');
 var argv = require('minimist')(process.argv.slice(2));
-var dataSource = argv.rc || path.resolve('./.spritesmithrc');
+var dataSource = argv.rc || path.resolve('./.spritesmith.js');
 var data = require(path.resolve(dataSource));
 
 if (Array.isArray(data)) {
