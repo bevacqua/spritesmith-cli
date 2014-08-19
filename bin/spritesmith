@@ -8,15 +8,21 @@ var mkdirp = require('mkdirp');
 var url = require('url2');
 var contra = require('contra');
 var json2css = require('json2css');
-var argv = require('minimist')(process.argv.slice(2));
 var spritesmith = require('..');
 var formats = require('../lib/formats');
+var argv = require('minimist')(process.argv.slice(2));
 var dataSource = argv.rc || path.resolve('./.spritesmithrc');
 var data = require(path.resolve(dataSource));
 
-contra.each(data, function run (data) {
+if (Array.isArray(data)) {
+  contra.each(data, run, noop);
+} else {
+  run(data);
+}
+
+function run (data) {
   var opts = {
-    src: argv._,
+    src: data.src,
     engine: 'auto',
     algorithm: 'binary-tree',
     padding: 0,
@@ -39,7 +45,7 @@ contra.each(data, function run (data) {
     }
     persist(result, data);
   }
-}, noop);
+}
 
 function persist (result, data) {
   mkdirp.sync(path.dirname(data.destImage))
