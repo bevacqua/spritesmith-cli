@@ -4,13 +4,14 @@
 
 var fs = require('fs');
 var path = require('path');
+var mkdirp = require('mkdirp');
 var url = require('url2');
 var contra = require('contra');
 var json2css = require('json2css');
 var argv = require('minimist')(process.argv.slice(2));
 var spritesmith = require('..');
 var formats = require('../lib/formats');
-var dataSource = argv._[0] || path.resolve('./.spritesmithrc');
+var dataSource = argv.rc || path.resolve('./.spritesmithrc');
 var data = require(path.resolve(dataSource));
 
 contra.each(data, function run (data) {
@@ -20,7 +21,7 @@ contra.each(data, function run (data) {
     algorithm: 'binary-tree',
     padding: 0,
     exportOpts: {
-      format: formats.get(data.destImage) || 'png',
+      format: formats.img.get(data.destImage) || 'png',
       quality: 100
     },
     cssVarMap: data.cssVarMap,
@@ -40,7 +41,7 @@ contra.each(data, function run (data) {
   }
 }, noop);
 
-function handle (result, data) {
+function persist (result, data) {
   mkdirp.sync(path.dirname(data.destImage))
   fs.writeFileSync(data.destImage, result.image, 'binary');
 
@@ -78,7 +79,7 @@ function handle (result, data) {
       json2css.addMustacheTemplate(cssFormat, fs.readFileSync(data.cssTemplate, 'utf8'));
     }
   } else {
-    cssFormat = data.cssFormat || cssFormats.get(data.destCSS) || 'json';
+    cssFormat = data.cssFormat || formats.css.get(data.destCSS) || 'json';
   }
 
   var cssStr = json2css(cleanCoords, {
@@ -93,23 +94,3 @@ function handle (result, data) {
 }
 
 function noop () {}
-
-/*
-sprite: function(type, short){
-    return {
-        dest: 'bin/public/img/sprite/' + type + '.png',
-        destCSS: 'bin/.tmp/sprite/' + type + '.css',
-        imgPath: '/img/sprite/' + type + '.png',
-        cssOpts: {
-            cssClass: function (item) {
-                var prefix = short ? short + '-' : '';
-                return '.' + prefix + item.name + ':before';
-            }
-        },
-        engine: 'gm',
-        imgOpts: {
-            format: 'png'
-        }
-    };
-}
-*/
