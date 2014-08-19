@@ -11,7 +11,7 @@ var argv = require('minimist')(process.argv.slice(2));
 var spritesmith = require('..');
 var formats = require('../lib/formats');
 var dataSource = argv._[0] || path.resolve('./.spritesmithrc');
-var data = fs.readFileSync(path.resolve(dataSource));
+var data = require(path.resolve(dataSource));
 
 contra.each(data, function run (data) {
   var opts = {
@@ -20,7 +20,7 @@ contra.each(data, function run (data) {
     algorithm: 'binary-tree',
     padding: 0,
     exportOpts: {
-      format: formats.get(dest) || 'png'
+      format: formats.get(data.destImage) || 'png',
       quality: 100
     },
     cssVarMap: data.cssVarMap,
@@ -38,15 +38,15 @@ contra.each(data, function run (data) {
     }
     persist(result, data);
   }
-});
+}, noop);
 
 function handle (result, data) {
-  mkdirp.sync(path.dirname(destImage))
-  fs.writeFileSync(destImage, result.image, 'binary');
+  mkdirp.sync(path.dirname(data.destImage))
+  fs.writeFileSync(data.destImage, result.image, 'binary');
 
   var coordinates = result.coordinates;
   var properties = result.properties;
-  var spritePath = data.imgPath || url.relative(destCSS, destImage);
+  var spritePath = data.imgPath || url.relative(data.destCSS, data.destImage);
   var cssVarMap = data.cssVarMap || noop;
   var cleanCoords = [];
 
@@ -78,7 +78,7 @@ function handle (result, data) {
       json2css.addMustacheTemplate(cssFormat, fs.readFileSync(data.cssTemplate, 'utf8'));
     }
   } else {
-    cssFormat = data.cssFormat || cssFormats.get(destCSS) || 'json';
+    cssFormat = data.cssFormat || cssFormats.get(data.destCSS) || 'json';
   }
 
   var cssStr = json2css(cleanCoords, {
@@ -86,10 +86,10 @@ function handle (result, data) {
     formatOpts: cssOptions
   });
 
-  mkdirp.sync(path.dirname(destCSS));
-  fs.writeFileSync(destCSS, cssStr, 'utf8');
+  mkdirp.sync(path.dirname(data.destCSS));
+  fs.writeFileSync(data.destCSS, cssStr, 'utf8');
 
-  console.log('Files "%s", and "%s" created.', destCSS, destImage);
+  console.log('Files "%s", and "%s" created.', data.destCSS, data.destImage);
 }
 
 function noop () {}
