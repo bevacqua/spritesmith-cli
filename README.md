@@ -19,6 +19,7 @@ spritesmith [options]
 These are the options you can set on the CLI.
 
 Option | Description
+-------|----------------------------------------------------------------------
 `--rc` | Point to a different `.spritesmith.js` configuration file
 
 The default configuration file used will be `.spritesmith.js` at the current working directory _(`process.cwd()`)_. This file should export a few properties. Note that you can export either a single object or an array. If you use an array you'll be able to create multiple spritesheets in one shot.
