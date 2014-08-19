@@ -17,6 +17,10 @@
   },
   "homepage": "https://github.com/bevacqua/spritesmith-cli",
   "dependencies": {
-    "spritesmith": "^0.19.2"
+    "contra": "^1.6.10",
+    "json2css": "^5.2.1",
+    "minimist": "^1.1.0",
+    "spritesmith": "^0.19.2",
+    "url2": "^1.0.3"
   }
 }

@@ -1,0 +1,115 @@
+#!/usr/bin/env node
+
+'use strict';
+
+var fs = require('fs');
+var path = require('path');
+var url = require('url2');
+var contra = require('contra');
+var json2css = require('json2css');
+var argv = require('minimist')(process.argv.slice(2));
+var spritesmith = require('..');
+var formats = require('../lib/formats');
+var dataSource = argv._[0] || path.resolve('./.spritesmithrc');
+var data = fs.readFileSync(path.resolve(dataSource));
+
+contra.each(data, function run (data) {
+  var opts = {
+    src: argv._,
+    engine: 'auto',
+    algorithm: 'binary-tree',
+    padding: 0,
+    exportOpts: {
+      format: formats.get(dest) || 'png'
+      quality: 100
+    },
+    cssVarMap: data.cssVarMap,
+    cssTemplate: data.cssTemplate,
+    cssOpts: data.cssOpts,
+    cssFormat: data.cssFormat,
+    destImage: data.destImage,
+    destCSS: data.destCSS
+  };
+  spritesmith(opts, handle);
+
+  function handle (err, result) {
+    if (err) {
+      throw err;
+    }
+    persist(result, data);
+  }
+});
+
+function handle (result, data) {
+  mkdirp.sync(path.dirname(destImage))
+  fs.writeFileSync(destImage, result.image, 'binary');
+
+  var coordinates = result.coordinates;
+  var properties = result.properties;
+  var spritePath = data.imgPath || url.relative(destCSS, destImage);
+  var cssVarMap = data.cssVarMap || noop;
+  var cleanCoords = [];
+
+  Object.keys(coordinates).sort().forEach(function cleanup (file) {
+    var fullname = path.basename(file);
+    var nameParts = fullname.split('.');
+    if (nameParts.length > 1) {
+      nameParts.pop();
+    }
+    var name = nameParts.join('.');
+    var coords = coordinates[file];
+
+    coords.name = name;
+    coords.source_image = file;
+    coords.image = spritePath;
+    coords.total_width = properties.width;
+    coords.total_height = properties.height;
+    coords = cssVarMap(coords) || coords;
+    cleanCoords.push(coords);
+  });
+
+  var cssFormat = 'spritesmith-custom';
+  var cssOptions = data.cssOpts || {};
+
+  if (data.cssTemplate) {
+    if (typeof data.cssTemplate === 'function') {
+      json2css.addTemplate(cssFormat, data.cssTemplate);
+    } else {
+      json2css.addMustacheTemplate(cssFormat, fs.readFileSync(data.cssTemplate, 'utf8'));
+    }
+  } else {
+    cssFormat = data.cssFormat || cssFormats.get(destCSS) || 'json';
+  }
+
+  var cssStr = json2css(cleanCoords, {
+    format: cssFormat,
+    formatOpts: cssOptions
+  });
+
+  mkdirp.sync(path.dirname(destCSS));
+  fs.writeFileSync(destCSS, cssStr, 'utf8');
+
+  console.log('Files "%s", and "%s" created.', destCSS, destImage);
+}
+
+function noop () {}
+
+/*
+sprite: function(type, short){
+    return {
+        dest: 'bin/public/img/sprite/' + type + '.png',
+        destCSS: 'bin/.tmp/sprite/' + type + '.css',
+        imgPath: '/img/sprite/' + type + '.png',
+        cssOpts: {
+            cssClass: function (item) {
+                var prefix = short ? short + '-' : '';
+                return '.' + prefix + item.name + ':before';
+            }
+        },
+        engine: 'gm',
+        imgOpts: {
+            format: 'png'
+        }
+    };
+}
+*/
