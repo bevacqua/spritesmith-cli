@@ -1,6 +1,6 @@
 # spritesmith-cli
 
-> Adds CLI to the [spritesmith][1] module
+> Adds a CLI to the [spritesmith][1] module
 
 Spritesmith is awesome but sometimes we don't want to [run it through Grunt][2].
 

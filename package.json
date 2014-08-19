@@ -1,0 +1,22 @@
+{
+  "name": "spritesmith-cli",
+  "version": "1.0.0",
+  "description": "Adds a CLI to the spritesmith module",
+  "main": "index.js",
+  "bin": {
+    "spritesmith": "bin/spritesmith"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bevacqua/spritesmith-cli.git"
+  },
+  "author": "Nicolas Bevacqua <nicolasbevacqua@gmail.com> (http://bevacqua.io/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bevacqua/spritesmith-cli/issues"
+  },
+  "homepage": "https://github.com/bevacqua/spritesmith-cli",
+  "dependencies": {
+    "spritesmith": "^0.19.2"
+  }
+}
