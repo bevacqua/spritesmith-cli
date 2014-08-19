@@ -1,6 +1,6 @@
 {
   "name": "spritesmith-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Adds a CLI to the spritesmith module",
   "main": "index.js",
   "bin": {
@@ -20,6 +20,7 @@
     "contra": "^1.6.10",
     "json2css": "^5.2.1",
     "minimist": "^1.1.0",
+    "mkdirp": "^0.5.0",
     "spritesmith": "^0.19.2",
     "url2": "^1.0.3"
   }
