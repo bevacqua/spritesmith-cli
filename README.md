@@ -32,7 +32,7 @@ Examples:
 var util = require('util');
 
 module.exports = {
-  src: 'client/img/icons/**/*.{png,gif,jpg}',
+  src: './client/img/icons/**/*.{png,gif,jpg}',
   destImage: '.bin/public/img/icons.png',
   destCSS: 'client/css/generated/icons.css',
   imgPath: '/img/icons.png',
@@ -50,7 +50,7 @@ module.exports = {
 var util = require('util');
 
 module.exports = [{
-  src: 'client/img/icons/**/*.{png,gif,jpg}',
+  src: './client/img/icons/**/*.{png,gif,jpg}',
   destImage: '.bin/public/img/icons.png',
   destCSS: 'client/css/generated/icons.css',
   imgPath: '/img/icons.png',
@@ -60,7 +60,7 @@ module.exports = [{
     }
   }
 }, {
-  src: 'client/img/markdown-editor/**/*.{png,gif,jpg}',
+  src: './client/img/markdown-editor/**/*.{png,gif,jpg}',
   destImage: '.bin/public/img/markdown-editor.png',
   destCSS: 'client/css/generated/markdown-editor.styl',
   imgPath: '/img/markdown-editor.png',
@@ -72,6 +72,8 @@ module.exports = [{
 }];
 ```
 
+Note that `src` can be either a globbing pattern or an array of globbing patterns, it'll be passed straight to [`multi-glob`][3].
+
 That's about it. For configuration information please refer to the [`grunt-spritesmith`][2] and [`spritesmith`][1] packages.
 
 # License
@@ -81,3 +83,4 @@ MIT
 
 [1]: https://github.com/Ensighten/spritesmith
 [2]: https://github.com/Ensighten/grunt-spritesmith
+[3]: https://github.com/busterjs/multi-glob

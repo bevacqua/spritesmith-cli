@@ -22,7 +22,7 @@ if (Array.isArray(data)) {
 
 function run (data) {
   var opts = {
-    src: data.src,
+    src: glob.sync(data.src),
     engine: 'auto',
     algorithm: 'binary-tree',
     padding: 0,
