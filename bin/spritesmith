@@ -22,23 +22,29 @@ if (Array.isArray(data)) {
 }
 
 function run (data) {
-  var opts = {
-    src: glob.sync(data.src),
-    engine: 'auto',
-    algorithm: 'binary-tree',
-    padding: 0,
-    exportOpts: {
-      format: formats.img.get(data.destImage) || 'png',
-      quality: 100
+  contra.waterfall([
+    function (next) {
+      glob(data.src, next);
     },
-    cssVarMap: data.cssVarMap,
-    cssTemplate: data.cssTemplate,
-    cssOpts: data.cssOpts,
-    cssFormat: data.cssFormat,
-    destImage: data.destImage,
-    destCSS: data.destCSS
-  };
-  spritesmith(opts, handle);
+    function (files, next) {
+      spritesmith({
+        src: ,
+        engine: 'auto',
+        algorithm: 'binary-tree',
+        padding: 0,
+        exportOpts: {
+          format: formats.img.get(data.destImage) || 'png',
+          quality: 100
+        },
+        cssVarMap: data.cssVarMap,
+        cssTemplate: data.cssTemplate,
+        cssOpts: data.cssOpts,
+        cssFormat: data.cssFormat,
+        destImage: data.destImage,
+        destCSS: data.destCSS
+      }, next);
+    }
+  ], handle);
 
   function handle (err, result) {
     if (err) {
