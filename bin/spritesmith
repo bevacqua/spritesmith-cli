@@ -8,6 +8,7 @@ var mkdirp = require('mkdirp');
 var url = require('url2');
 var contra = require('contra');
 var json2css = require('json2css');
+var glob = require('multi-glob');
 var spritesmith = require('..');
 var formats = require('../lib/formats');
 var argv = require('minimist')(process.argv.slice(2));
