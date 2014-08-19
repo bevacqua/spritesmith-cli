@@ -8,7 +8,7 @@ var mkdirp = require('mkdirp');
 var url = require('url2');
 var contra = require('contra');
 var json2css = require('json2css');
-var glob = require('multi-glob');
+var multi = require('multi-glob');
 var spritesmith = require('..');
 var formats = require('../lib/formats');
 var argv = require('minimist')(process.argv.slice(2));
@@ -24,11 +24,11 @@ if (Array.isArray(data)) {
 function run (data) {
   contra.waterfall([
     function (next) {
-      glob(data.src, next);
+      multi.glob(data.src, next);
     },
     function (files, next) {
       spritesmith({
-        src: ,
+        src: files,
         engine: 'auto',
         algorithm: 'binary-tree',
         padding: 0,
