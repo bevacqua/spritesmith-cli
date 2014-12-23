@@ -29,12 +29,12 @@ function run (data) {
     function (files, next) {
       spritesmith({
         src: files,
-        engine: 'auto',
-        algorithm: 'binary-tree',
-        padding: 0,
+        engine: data.engine || 'auto',
+        algorithm: data.algorithm || 'binary-tree',
+        padding: data.padding || 0,
         exportOpts: {
           format: formats.img.get(data.destImage) || 'png',
-          quality: 100
+          quality: data.quality || 100
         },
         cssVarMap: data.cssVarMap,
         cssTemplate: data.cssTemplate,
