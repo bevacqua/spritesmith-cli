@@ -36,6 +36,9 @@ module.exports = {
   destImage: '.bin/public/img/icons.png',
   destCSS: 'client/css/generated/icons.css',
   imgPath: '/img/icons.png',
+  padding: 2,
+  algorithm: 'top-down',
+  engine: 'gmsmith',
   cssOpts: {
     cssClass: function (item) {
       return util.format('.ic-%s:before', item.name);
