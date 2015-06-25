@@ -114,12 +114,12 @@ function persist (result, data) {
 function noop () {}
 
 function loadEngine(engine) {
-	if (engine && !spritesmith.engines[engine]) {
-		try {
-			spritesmith.addEngine(engine, require(engine));
-		} catch(ex) {
-			console.log('could not find/load module "%s"', engine);
-		process.exit();
-		}
-	}
+  if (engine && !spritesmith.engines[engine]) {
+    try {
+      spritesmith.addEngine(engine, require(engine));
+    } catch(ex) {
+      console.log('could not find/load module "%s"', engine);
+      process.exit();
+    }
+  }
 }
