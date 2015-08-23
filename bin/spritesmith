@@ -29,7 +29,7 @@ function run (data) {
     function (files, next) {
       spritesmith({
         src: files,
-        engine: data.engine || 'auto',
+        engine: data.engine || 'phantomjssmith',
         algorithm: data.algorithm || 'binary-tree',
         padding: data.padding || 0,
         exportOpts: {
