@@ -31,6 +31,7 @@ function run (data) {
         src: files,
         engine: data.engine || 'phantomjssmith',
         algorithm: data.algorithm || 'binary-tree',
+        algorithmOpts: data.algorithmOpts || {},
         padding: data.padding || 0,
         exportOpts: {
           format: formats.img.get(data.destImage) || 'png',
