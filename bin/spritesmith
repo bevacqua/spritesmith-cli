@@ -55,9 +55,19 @@ function run (data) {
   }
 }
 
-function persist (result, data) {
+function createImage (result, data) {
+
+  if (!data.destImage) { return; }
+
   mkdirp.sync(path.dirname(data.destImage))
   fs.writeFileSync(data.destImage, result.image, 'binary');
+
+  console.log('[spritesmith] "%s" created.', data.destImage);
+}
+
+function createCSS (result, data) {
+
+  if (!data.destCSS) { return; }
 
   var coordinates = result.coordinates;
   var properties = result.properties;
@@ -104,7 +114,13 @@ function persist (result, data) {
   mkdirp.sync(path.dirname(data.destCSS));
   fs.writeFileSync(data.destCSS, cssStr, 'utf8');
 
-  console.log('Files "%s", and "%s" created.', data.destCSS, data.destImage);
+  console.log('[spritesmith] "%s" created.', data.destCSS);
+
+}
+
+function persist (result, data) {
+  createImage(result, data);
+  createCSS(result, data);
 }
 
 function noop () {}
