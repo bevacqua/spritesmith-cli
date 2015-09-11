@@ -38,6 +38,7 @@ module.exports = {
   imgPath: '/img/icons.png',
   padding: 2,
   algorithm: 'top-down',
+  algorithmOpts: { sort: false },
   engine: 'gmsmith',
   cssOpts: {
     cssClass: function (item) {
@@ -76,6 +77,9 @@ module.exports = [{
 ```
 
 Note that `src` can be either a globbing pattern or an array of globbing patterns, it'll be passed straight to [`multi-glob`][3].
+
+The `destImage` and `destCSS` properties are optional and can be omitted.
+That means that you can create only one file depending on your needs.
 
 That's about it. For configuration information please refer to the [`grunt-spritesmith`][2] and [`spritesmith`][1] packages.
 
