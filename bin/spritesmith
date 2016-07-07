@@ -12,6 +12,7 @@ var multi = require('multi-glob');
 var spritesmith = require('..');
 var formats = require('../lib/formats');
 var argv = require('minimist')(process.argv.slice(2));
+var quite = argv.quite || false;
 var dataSource = argv.rc || path.resolve('./.spritesmith.js');
 var data = require(path.resolve(dataSource));
 
@@ -62,7 +63,9 @@ function createImage (result, data) {
   mkdirp.sync(path.dirname(data.destImage))
   fs.writeFileSync(data.destImage, result.image, 'binary');
 
-  console.log('[spritesmith] "%s" created.', data.destImage);
+  if (!quite) {
+    console.log('[spritesmith] "%s" created.', data.destImage);
+  }
 }
 
 function createCSS (result, data) {
@@ -114,7 +117,9 @@ function createCSS (result, data) {
   mkdirp.sync(path.dirname(data.destCSS));
   fs.writeFileSync(data.destCSS, cssStr, 'utf8');
 
-  console.log('[spritesmith] "%s" created.', data.destCSS);
+  if (!quite) {
+    console.log('[spritesmith] "%s" created.', data.destCSS);
+  }
 
 }
 
