@@ -34,7 +34,7 @@ function run (data) {
         algorithmOpts: data.algorithmOpts || {},
         padding: data.padding || 0,
         exportOpts: {
-          format: formats.img.get(data.destImage) || 'png',
+          format: data.destImage && formats.img.get(data.destImage) || 'png',
           quality: data.quality || 100
         },
         cssVarMap: data.cssVarMap,
