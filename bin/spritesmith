@@ -7,7 +7,7 @@ var path = require('path');
 var mkdirp = require('mkdirp');
 var url = require('url2');
 var contra = require('contra');
-var json2css = require('json2css');
+var templater = require('spritesheet-templates');
 var multi = require('multi-glob');
 var spritesmith = require('..');
 var formats = require('../lib/formats');
@@ -27,14 +27,14 @@ function run (data) {
       multi.glob(data.src, next);
     },
     function (files, next) {
-      spritesmith({
+      spritesmith.run({
         src: files,
         engine: data.engine || 'pixelsmith',
         algorithm: data.algorithm || 'binary-tree',
         algorithmOpts: data.algorithmOpts || {},
         padding: data.padding || 0,
         exportOpts: {
-          format: formats.img.get(data.destImage) || 'png',
+          format: data.destImage && formats.img.get(data.destImage) || 'png',
           quality: data.quality || 100
         },
         cssVarMap: data.cssVarMap,
@@ -59,7 +59,7 @@ function createImage (result, data) {
 
   if (!data.destImage) { return; }
 
-  mkdirp.sync(path.dirname(data.destImage))
+  mkdirp.sync(path.dirname(data.destImage));
   fs.writeFileSync(data.destImage, result.image, 'binary');
 
   console.log('[spritesmith] "%s" created.', data.destImage);
@@ -85,10 +85,6 @@ function createCSS (result, data) {
     var coords = coordinates[file];
 
     coords.name = name;
-    coords.source_image = file;
-    coords.image = spritePath;
-    coords.total_width = properties.width;
-    coords.total_height = properties.height;
     coords = cssVarMap(coords) || coords;
     cleanCoords.push(coords);
   });
@@ -98,15 +94,22 @@ function createCSS (result, data) {
 
   if (data.cssTemplate) {
     if (typeof data.cssTemplate === 'function') {
-      json2css.addTemplate(cssFormat, data.cssTemplate);
+      templater.addTemplate(cssFormat, data.cssTemplate);
     } else {
-      json2css.addMustacheTemplate(cssFormat, fs.readFileSync(data.cssTemplate, 'utf8'));
+      templater.addHandlebarsTemplate(cssFormat, fs.readFileSync(data.cssTemplate, 'utf8'));
     }
   } else {
     cssFormat = data.cssFormat || formats.css.get(data.destCSS) || 'json';
   }
 
-  var cssStr = json2css(cleanCoords, {
+  var cssStr = templater({
+    sprites: cleanCoords,
+    spritesheet: {
+      width: properties.width,
+      height: properties.height,
+      image: spritePath
+    }
+  }, {
     format: cssFormat,
     formatOpts: cssOptions
   });
