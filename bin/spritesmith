@@ -22,6 +22,11 @@ if (Array.isArray(data)) {
 }
 
 function run (data) {
+
+  if (data.engine) {
+    loadEngine(data.engine);
+  }
+  
   contra.waterfall([
     function (next) {
       multi.glob(data.src, next);
@@ -124,3 +129,14 @@ function persist (result, data) {
 }
 
 function noop () {}
+
+function loadEngine(engine) {
+  if (engine && !spritesmith.engines[engine]) {
+    try {
+      spritesmith.addEngine(engine, require(engine));
+    } catch(ex) {
+      console.log('could not find/load module "%s"', engine);
+      process.exit();
+    }
+  }
+}
