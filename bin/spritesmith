@@ -37,6 +37,7 @@ function run (data) {
           format: formats.img.get(data.destImage) || 'png',
           quality: data.quality || 100
         },
+        engineOpts: data.engineOpts || {},
         cssVarMap: data.cssVarMap,
         cssTemplate: data.cssTemplate,
         cssOpts: data.cssOpts,
